@@ -1,0 +1,11 @@
+This small project uses odeint to solve a simple ODE with interval
+arithmetic. Te ODE that is resolved is x' = -x, with x being an
+interval. To represent the interval arithmetic I used the 
+Boost.Interval library. The program integrates the above ODE starting
+from the initial interval x0 = [100, 100.1] for 500 steps with constant
+step size dt = 0.01 using Runge-Kutta-4 scheme. The program writes to
+the standart output at every timestep the current state. Th output can
+be plotted with gnuplot.
+In order to compile this little project, it needs the odeint and boost
+projects in the same folder with the sources(see Makefile). The odeint
+and boost projects folders names have to be 'boost' and 'odeint'.
