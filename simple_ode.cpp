@@ -21,16 +21,14 @@ void simple_ode(const state_type &x, state_type &dxdt, const double)
 //observer that will store the intermediate steps in a container
 struct push_back_state_and_time
 {
-    std::vector< state_type >& m_states;
-    std::vector< double >& m_times;
-
-    push_back_state_and_time( std::vector< state_type > &states , std::vector< double > &times )
-    : m_states( states ) , m_times( times ) { }
+    push_back_state_and_time() { }
 
     void operator()( const state_type &x , double t )
     {
-        m_states.push_back( x );
-        m_times.push_back( t );
+        double low  = x[0].lower();
+        double up   = x[0].upper();
+
+        cout << t << '\t' << low << '\t' << up << '\n';
     }
 };
 
@@ -41,10 +39,6 @@ int main()
 	interval<double> initial_interval(100, 100.1);
     start_state[0] = initial_interval;
 
-    //declaration of vectors that will contains the final informations
-    vector<state_type> x_vec;
-    vector<double> times;
-
     //initialization of integrating function parameters
     double start_time(0.0), dt(0.01);
     int num_of_steps(500);
@@ -52,16 +46,7 @@ int main()
     //initialization of numerical stepper that will be used for numerical integration
 	runge_kutta4< state_type > stepper;
 	integrate_n_steps(stepper, simple_ode, start_state, start_time, dt, num_of_steps, 
-            push_back_state_and_time( x_vec , times )) ;
-
-    //print the results to the output
-	for( size_t i = 0; i <= num_of_steps; i++ )
-    {
-        double low = x_vec[i][0].lower();
-        double up = x_vec[i][0].upper();
-
-        cout << times[i] << '\t' << low << '\t' << up << '\n';
-    }
+            push_back_state_and_time()) ;
 
 	return 0;
 }
